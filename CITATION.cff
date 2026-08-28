@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Euclid Q1 Morphology Consistency Audit"
+type: software
+authors:
+  - family-names: "Jana"
+    given-names: "Biswajit"
+version: 0.1.0
+date-released: 2026-08-28
+url: "https://github.com/Biswajit1999/euclid-morphology-consistency"
+license: MIT
+keywords:
+  - euclid
+  - galaxy-morphology
+  - astrophysics
+  - reproducibility
+references:
+  - type: data
+    authors:
+      - name: "Euclid Collaboration"
+    title: "Euclid Quick Release 1 (Q1)"
+    year: 2025
+    notes: "Released 2025-03-19; accessed via IRSA TAP, https://irsa.ipac.caltech.edu/TAP"

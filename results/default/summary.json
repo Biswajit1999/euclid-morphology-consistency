@@ -1,0 +1,19 @@
+{
+  "filter_consistency": {
+    "n": 20000,
+    "pearson_r": 0.20363703734388386,
+    "pearson_p": 3.3608092254060792e-186,
+    "median_diff_vis_minus_nir": -0.0017323344900000148,
+    "mad_diff": 0.74037785829
+  },
+  "method_correlation": {
+    "n": 20000,
+    "spearman_r": 0.4147662043604384,
+    "spearman_p": 0.0
+  },
+  "quality_flags": {
+    "n_rows": 20000,
+    "frac_sersic_ext_chi2_above_2": 0.0195,
+    "frac_concentration_negative": 0.0
+  }
+}

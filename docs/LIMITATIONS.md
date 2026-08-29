@@ -1,16 +1,39 @@
 # Limitations and Known Failure Modes
 
-## Sample is spatially concentrated, not stratified
+## Position bins remain narrow within each field
 
-`load_morphology_sample` uses an unordered ADQL `TOP N` query, which
-returns whatever rows the database happens to return first -- in practice
-a narrow sky region, not a representative sample of the full Q1 footprint
-(63.1 deg^2 across three deep fields). The default 20,000-object run
-yields only 3 usable position-bins (`docs/METHODS.md`), which means the
-"position-dependent" half of the research question is only weakly
-addressed by this version. A spatially stratified or random sample (e.g.
-ORDER BY a hash of object_id, or explicit per-field queries) is a real,
-tractable fix, tracked as a repository issue.
+`load_morphology_sample` now queries each of the three real deep fields
+separately (an earlier version's single unordered `TOP N` query drew
+almost the entire sample from one field -- superseded, see
+`docs/CLAIMS.md`), and `position_dependent_residuals` bins within each
+field's own footprint. This resolves the *cross-field* representativeness
+problem, but each field's cone-search radius (2.2-3.2 deg,
+`src/euclidmorph/data.py`) is itself narrow, so the 19 populated bins in
+the default run are still a modest sample of each field's true sky
+extent, not a fine-grained systematics map. A few of the smallest bins
+(n~20-30) show a larger median residual than the population as a whole;
+this project has not determined whether that reflects a real localized
+effect or ordinary small-sample scatter (`docs/METHODS.md`) -- treat
+individual small bins with caution, and prefer the population-level
+result for any decision that matters.
+
+## Server-side ORDER BY was found to be prohibitively slow
+
+An `ORDER BY object_id` was tried in the live ADQL query, specifically to
+make row *order* (not just row *selection*) deterministic. Measured
+directly against the live IRSA TAP service, adding it made a single-field
+`TOP 70` query take ~235s versus ~8s without it -- the service apparently
+must fully evaluate and sort the entire joined-and-filtered candidate set
+before it can apply `TOP N` when sorting is requested, rather than
+stopping early once N matches are found. That is too slow to run
+synchronously (and it multiplies across 3 deep-field queries per fetch).
+The unordered query was checked directly and returned the identical row
+set and order across two repeated live fetches, so this static, frozen Q1
+release does not exhibit observable drift in practice -- but the
+ADQL/TAP specification does not formally guarantee that absent an
+explicit `ORDER BY`. Row order is instead made deterministic
+client-side, by sorting on `object_id` after fetching
+(`src/euclidmorph/data.py`).
 
 ## Disk+bulge fit is unpopulated in this Q1 release
 
@@ -27,7 +50,7 @@ CAS statistics instead.
 The Sersic index and CAS concentration are different measurement
 approaches to related but distinct physical quantities (profile shape vs.
 light-curve-of-growth concentration). A moderate correlation
-(Spearman r=0.41) is the expected, physically sensible result; it should
+(Spearman r=0.428) is the expected, physically sensible result; it should
 not be read as either statistic being "wrong" or the two being
 interchangeable.
 

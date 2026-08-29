@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "Euclid Q1 Morphology Consistency Audit"
+title: "Euclid Q1 Morphology Measurement Comparison"
 type: software
 authors:
   - family-names: "Jana"
     given-names: "Biswajit"
-version: 0.1.0
-date-released: 2026-08-28
+version: 0.2.0
+date-released: 2026-08-29
 url: "https://github.com/Biswajit1999/euclid-morphology-consistency"
 license: MIT
 keywords:

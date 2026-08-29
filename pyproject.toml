@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "euclidmorph"
-version = "0.1.0"
-description = "Cross-model and cross-filter consistency audit of real Euclid Q1 galaxy morphology measurements (IRSA TAP), companion to euclid-star-shapes and euclid-spectra-quality."
+version = "0.2.0"
+description = "Cross-filter and cross-method consistency comparison of real Euclid Q1 galaxy morphology measurements (IRSA TAP), companion to euclid-star-shapes and euclid-spectra-quality."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

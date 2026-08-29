@@ -23,15 +23,40 @@ import pandas as pd
 from scipy import stats
 
 
-def filter_consistency(df: pd.DataFrame) -> dict:
+def filter_consistency(df: pd.DataFrame, seed: int = 0) -> dict:
+    """Cross-filter (VIS vs NIR Sersic index) consistency, with a
+    bootstrap confidence interval and a signed-rank significance test on
+    the median difference -- not just the point estimate. An earlier
+    version of this function reported only the median diff, and README
+    prose concluded "no population-level bias" from that point estimate
+    alone with no uncertainty interval or significance test -- an
+    external review (Codex) flagged this as stronger than the analysis
+    supported. A statistically significant median difference from zero
+    is still fully consistent with "no *practically meaningful* bias" if
+    the effect size (median diff, CI width) is small relative to the
+    measurement's own scatter (`mad_diff`) -- both are reported so a
+    reader can judge that distinction themselves, not just a p-value.
+    """
     vis = df["sersic_sersic_vis_index"].to_numpy()
     nir = df["sersic_sersic_nir_index"].to_numpy()
     diff = vis - nir
     r, p = stats.pearsonr(vis, nir)
+
+    rng = np.random.default_rng(seed)
+    boot = stats.bootstrap(
+        (diff,), np.median, confidence_level=0.95, n_resamples=2000,
+        random_state=rng, method="percentile",
+    )
+    wilcoxon_stat, wilcoxon_p = stats.wilcoxon(diff)
+
     return {
         "n": len(df), "pearson_r": float(r), "pearson_p": float(p),
         "median_diff_vis_minus_nir": float(np.median(diff)),
+        "median_diff_ci95_low": float(boot.confidence_interval.low),
+        "median_diff_ci95_high": float(boot.confidence_interval.high),
         "mad_diff": float(stats.median_abs_deviation(diff)),
+        "wilcoxon_statistic": float(wilcoxon_stat),
+        "wilcoxon_pvalue": float(wilcoxon_p),
     }
 
 
@@ -47,16 +72,42 @@ def position_dependent_residuals(
 ) -> pd.DataFrame:
     """Bin the VIS-NIR Sersic-index residual by sky position and report
     the median residual and count per bin -- a direct check for
-    position-dependent systematics."""
+    position-dependent systematics.
+
+    Bins are computed *within* each deep field separately when a
+    ``deep_field`` column is present. An earlier version binned ra/dec
+    over the full combined range of all rows at once; since Q1's real
+    footprint is three disjoint deep fields separated by tens of degrees
+    (not a continuous survey -- see data.py), that made nearly every one
+    of the ``n_ra_bins x n_dec_bins`` grid cells fall in the empty sky
+    between fields, and each field (which only spans a few degrees) fell
+    entirely inside a single cell -- collapsing this from a check for
+    *sub-field* spatial systematics down to, in effect, a per-field
+    comparison. Checked directly against the real 20,000-row sample: the
+    old binning produced exactly 3 populated bins out of 36, one per
+    field. Binning within each field's own footprint restores real
+    sub-field spatial resolution.
+    """
     work = df.copy()
     work["resid"] = work["sersic_sersic_vis_index"] - work["sersic_sersic_nir_index"]
-    work["ra_bin"] = pd.cut(work["ra"], bins=n_ra_bins)
-    work["dec_bin"] = pd.cut(work["dec"], bins=n_dec_bins)
 
-    grouped = work.groupby(["ra_bin", "dec_bin"], observed=True).agg(
-        n=("resid", "size"), median_resid=("resid", "median"), std_resid=("resid", "std"),
-    ).reset_index()
-    return grouped[grouped["n"] >= min_per_bin]
+    group_col = "deep_field" if "deep_field" in work.columns else None
+    groups = work.groupby(group_col, observed=True) if group_col else [(None, work)]
+
+    parts = []
+    for field_name, sub in groups:
+        sub = sub.copy()
+        sub["ra_bin"] = pd.cut(sub["ra"], bins=n_ra_bins)
+        sub["dec_bin"] = pd.cut(sub["dec"], bins=n_dec_bins)
+        grouped = sub.groupby(["ra_bin", "dec_bin"], observed=True).agg(
+            n=("resid", "size"), median_resid=("resid", "median"), std_resid=("resid", "std"),
+        ).reset_index()
+        if group_col:
+            grouped.insert(0, group_col, field_name)
+        parts.append(grouped)
+
+    combined = pd.concat(parts, ignore_index=True)
+    return combined[combined["n"] >= min_per_bin].reset_index(drop=True)
 
 
 def quality_flag_summary(df: pd.DataFrame) -> dict:

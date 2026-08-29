@@ -35,10 +35,29 @@ def test_real_excerpt_all_rows_have_good_sersic_flag():
 
 
 def test_real_excerpt_ra_dec_are_in_the_q1_deep_field_range():
-    # Euclid Deep Field Fornax region, per docs/DATA_SOURCES.md
+    """Regression test: the original version of this test only checked
+    generic all-sky bounds (0-360, -90 to 90) despite its name claiming to
+    check the actual Q1 deep field range -- an external review (Codex)
+    caught this. This excerpt's coordinates (RA~64.0, Dec~-48.7) are
+    actually from the Euclid Deep Field **South** region (center
+    RA=61.2410, Dec=-48.4230), not Fornax as an earlier comment here
+    incorrectly stated -- corrected. Check it actually falls within that
+    field, not just anywhere on the sky."""
+    import numpy as np
+
+    from euclidmorph.data import DEEP_FIELDS
+
+    south = next(f for f in DEEP_FIELDS if f["name"] == "EDF-South")
     df = pd.read_csv(io.StringIO(_REAL_EXCERPT_CSV))
-    assert df["ra"].between(0, 360).all()
-    assert df["dec"].between(-90, 90).all()
+    # Angular separation on the sky (small-angle approximation, adequate
+    # for a few-degree separation), not independent RA/Dec box bounds --
+    # matches the actual CIRCLE(...) cone-search geometry used by the
+    # live query in data.py.
+    dec_rad = np.radians(df["dec"])
+    d_ra = (df["ra"] - south["ra_deg"]) * np.cos(dec_rad)
+    d_dec = df["dec"] - south["dec_deg"]
+    sep_deg = np.hypot(d_ra, d_dec)
+    assert (sep_deg < south["search_radius_deg"]).all()
 
 
 @pytest.mark.network
@@ -47,6 +66,36 @@ def test_live_fetch_returns_populated_concentration_column(tmp_path):
 
     paths = CachePaths(cache_dir=tmp_path)
     df = load_morphology_sample(paths, n=200)
-    assert len(df) == 200
+    # Not asserting an exact count: a field may have fewer than its
+    # proportional allocation of real qualifying objects within its
+    # search radius, in which case TOP N returns fewer rows -- a real
+    # possibility with live data, not something to paper over with an
+    # exact-count assertion.
+    assert len(df) > 150
     assert df["concentration"].notna().all()
     assert (df["sersic_ext_flags"] == 0).all()
+
+
+@pytest.mark.network
+def test_live_fetch_covers_multiple_deep_fields(tmp_path):
+    """Regression test for the representativeness bug: the original
+    unordered SELECT TOP N drew almost the entire sample from one deep
+    field (an external review, Codex, found only 3 of 36 spatial bins
+    populated in the committed sample). The stratified fetch should
+    return objects from all three deep fields."""
+    from euclidmorph.data import CachePaths, load_morphology_sample
+
+    paths = CachePaths(cache_dir=tmp_path)
+    df = load_morphology_sample(paths, n=300)
+    assert df["deep_field"].nunique() == 3
+
+
+@pytest.mark.network
+def test_disk_sersic_null_audit_is_reproducible_and_committed(tmp_path):
+    from euclidmorph.data import CachePaths, audit_disk_sersic_null_fraction
+
+    paths = CachePaths(cache_dir=tmp_path)
+    result = audit_disk_sersic_null_fraction(paths)
+    assert result["n_total_rows"] > 0
+    assert 0.0 <= result["frac_null"] <= 1.0
+    assert (paths.cache_dir / "disk_sersic_null_audit.json").exists()

@@ -1,0 +1,7 @@
+{
+  "query": "SELECT COUNT(*) AS n_total,\n       COUNT(disk_sersic_disk_radius) AS n_disk_sersic_populated\nFROM euclid_q1_mer_morphology",
+  "accessed_utc": "2026-08-29T12:58:44Z",
+  "n_total_rows": 29953430,
+  "n_disk_sersic_disk_radius_populated": 0,
+  "frac_null": 1.0
+}

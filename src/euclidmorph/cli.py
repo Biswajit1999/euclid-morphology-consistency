@@ -12,7 +12,7 @@ from .analysis import (
     position_dependent_residuals,
     quality_flag_summary,
 )
-from .data import CachePaths, load_morphology_sample
+from .data import CachePaths, audit_disk_sersic_null_fraction, load_morphology_sample
 
 
 @click.group()
@@ -42,6 +42,23 @@ def run_cmd(cache_dir: str, out_dir: str, n: int) -> None:
     position = position_dependent_residuals(df)
     position.to_csv(out / "position_residuals.csv", index=False)
     click.echo(f"Wrote {out/'position_residuals.csv'} ({len(position)} sky-position bins with >=20 objects)")
+
+
+@main.command("audit-schema")
+@click.option("--cache-dir", default="data/cache", show_default=True)
+@click.option("--out", "out_dir", default="results", show_default=True)
+@click.option("--force", is_flag=True, default=False)
+def audit_schema_cmd(cache_dir: str, out_dir: str, force: bool) -> None:
+    """Live, reproducible COUNT query answering whether the catalog's
+    disk+bulge Sersic fit (``disk_sersic_*`` columns) is populated in the
+    Q1 release -- committed with its exact ADQL, a checksum, and a
+    timestamp, not just asserted in prose (see docs/VALIDATION.md)."""
+    paths = CachePaths(cache_dir=Path(cache_dir))
+    result = audit_disk_sersic_null_fraction(paths, force=force)
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "disk_sersic_null_audit.json").write_text(json.dumps(result, indent=2))
+    click.echo(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

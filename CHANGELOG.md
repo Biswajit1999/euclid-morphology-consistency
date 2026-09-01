@@ -3,6 +3,12 @@
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-09-01
+
+- Make both pairwise analyses explicit complete-case analyses and report dropped-row counts.
+- Reject invalid sample sizes.
+- Fix first-run provenance-manifest creation when `data/cache` does not yet exist.
+
 ## [0.2.0] - 2026-08-29
 
 Fixes for issues raised by an external review (Codex); no repository

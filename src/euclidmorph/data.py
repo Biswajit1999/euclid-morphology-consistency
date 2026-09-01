@@ -115,6 +115,7 @@ def _record_manifest(name: str, query: str, raw: bytes, paths: CachePaths) -> No
         "url": IRSA_TAP_SYNC, "query": query.strip(), "sha256": hashlib.sha256(raw).hexdigest(),
         "n_bytes": len(raw), "accessed_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
+    paths.cache_dir.mkdir(parents=True, exist_ok=True)
     manifest = json.loads(paths.manifest.read_text()) if paths.manifest.exists() else {}
     manifest[name] = entry
     paths.manifest.write_text(json.dumps(manifest, indent=2, sort_keys=True))
@@ -124,6 +125,8 @@ def load_morphology_sample(paths: CachePaths, n: int = 20000, force: bool = Fals
     """Fetch (or read cached) a real Euclid Q1 MER morphology sample,
     stratified across the three real deep fields (see module docstring)
     rather than one unordered, spatially-unconstrained query."""
+    if n <= 0:
+        raise ValueError("n must be positive")
     cache_file = paths.cache_dir / f"morphology_sample_{n}.csv"
     if cache_file.exists() and not force:
         return pd.read_csv(cache_file)

@@ -108,3 +108,14 @@ def test_quality_flag_summary_reports_expected_fields():
     result = quality_flag_summary(df)
     assert result["n_rows"] == 500
     assert 0.0 <= result["frac_sersic_ext_chi2_above_2"] <= 1.0
+
+
+def test_pairwise_analyses_drop_missing_values_and_report_denominator():
+    df = _synthetic_df(n=20, seed=7)
+    df.loc[0, "sersic_sersic_nir_index"] = np.nan
+    df.loc[1, "concentration"] = np.nan
+    filter_result = filter_consistency(df)
+    method_result = method_correlation(df)
+    assert filter_result["n_input"] == 20
+    assert filter_result["n_dropped_missing"] == 1
+    assert method_result["n_dropped_missing"] == 1

@@ -8,6 +8,14 @@ import io
 import pandas as pd
 import pytest
 
+from euclidmorph.data import CachePaths, _record_manifest
+
+
+def test_record_manifest_creates_cache_directory(tmp_path):
+    paths = CachePaths(cache_dir=tmp_path / "new-cache")
+    _record_manifest("sample.csv", "SELECT 1", b"value\n1\n", paths)
+    assert paths.manifest.exists()
+
 _REAL_EXCERPT_CSV = """object_id,ra,dec,sersic_sersic_vis_radius,sersic_sersic_vis_axis_ratio,sersic_sersic_vis_index,sersic_sersic_nir_radius,sersic_sersic_nir_axis_ratio,sersic_sersic_nir_index,sersic_ext_reduced_chi2,sersic_ext_flags,concentration,concentration_err,gini,asymmetry,smoothness
 -640313926487389991,64.03139267,-48.73899914,2.4099083245e-01,1.0000000000e+00,2.9156799316e+00,5.3580588102e-01,9.0964704752e-01,1.3727476597e+00,3.8974237061e+02,0,4.1289453506e+00,2.7381345630e-01,7.1791917086e-01,3.9151895046e-01,3.7834545970e-01
 -640371822487390002,64.03718226,-48.73900027,1.3159011602e+00,3.8113859296e-01,1.0992510319e+00,6.2844686508e+00,3.2191899419e-01,3.0364966393e-01,9.0923421085e-02,0,2.1145503521e+00,5.7251971960e-01,7.9500389099e-01,4.9027439207e-02,2.6977646351e-01

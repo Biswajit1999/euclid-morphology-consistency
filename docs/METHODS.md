@@ -20,13 +20,13 @@ correlated).
 
 Tested on 20,000 real, quality-flagged Q1 objects
 (`results/default/summary.json`): the median VIS-NIR difference is
--0.00158, with a 95% bootstrap CI of [-0.00317, -0.00078] (2000
+-0.00129, with a 95% bootstrap CI of [-0.00261, -0.00060] (2000
 resamples, seeded) that excludes zero, and a Wilcoxon signed-rank test
-against zero gives p=2.9e-13. So H0's "unbiased" part is, strictly,
+against zero gives p=4.9e-14. So H0's "unbiased" part is, strictly,
 **rejected** at the population level -- but the effect size is tiny: the
-median difference is about 460x smaller than the per-object scatter
-(MAD=0.731). H0's "tightly correlated" part also does not hold (Pearson
-r=0.198): individual VIS and NIR Sersic-index measurements for the same
+median difference is about 552x smaller than the per-object scatter
+(MAD=0.713). H0's "tightly correlated" part also does not hold (Pearson
+r=0.209): individual VIS and NIR Sersic-index measurements for the same
 galaxy often disagree substantially, even though the *typical* direction
 of disagreement is close to (but not exactly) zero. An earlier version of
 this project reported only the median-diff point estimate and concluded
@@ -39,7 +39,7 @@ for themselves.
 
 The parametric single-Sersic index (VIS) is compared against the
 independently computed non-parametric CAS concentration statistic for the
-same objects (Spearman r=0.428, p~0) -- a moderate, statistically
+same objects (Spearman r=0.424, p~0) -- a moderate, statistically
 significant positive correlation, consistent with both statistics
 capturing related (but not identical) information about light
 concentration. This is reported as a correlation-and-residual-structure

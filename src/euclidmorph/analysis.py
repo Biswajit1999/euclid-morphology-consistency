@@ -37,8 +37,11 @@ def filter_consistency(df: pd.DataFrame, seed: int = 0) -> dict:
     measurement's own scatter (`mad_diff`) -- both are reported so a
     reader can judge that distinction themselves, not just a p-value.
     """
-    vis = df["sersic_sersic_vis_index"].to_numpy()
-    nir = df["sersic_sersic_nir_index"].to_numpy()
+    complete = df.dropna(subset=["sersic_sersic_vis_index", "sersic_sersic_nir_index"])
+    if len(complete) < 2:
+        raise ValueError("at least two complete VIS/NIR Sersic-index pairs are required")
+    vis = complete["sersic_sersic_vis_index"].to_numpy()
+    nir = complete["sersic_sersic_nir_index"].to_numpy()
     diff = vis - nir
     r, p = stats.pearsonr(vis, nir)
 
@@ -50,7 +53,8 @@ def filter_consistency(df: pd.DataFrame, seed: int = 0) -> dict:
     wilcoxon_stat, wilcoxon_p = stats.wilcoxon(diff)
 
     return {
-        "n": len(df), "pearson_r": float(r), "pearson_p": float(p),
+        "n_input": len(df), "n": len(complete), "n_dropped_missing": len(df) - len(complete),
+        "pearson_r": float(r), "pearson_p": float(p),
         "median_diff_vis_minus_nir": float(np.median(diff)),
         "median_diff_ci95_low": float(boot.confidence_interval.low),
         "median_diff_ci95_high": float(boot.confidence_interval.high),
@@ -61,10 +65,14 @@ def filter_consistency(df: pd.DataFrame, seed: int = 0) -> dict:
 
 
 def method_correlation(df: pd.DataFrame) -> dict:
-    sersic_n = df["sersic_sersic_vis_index"].to_numpy()
-    conc = df["concentration"].to_numpy()
+    complete = df.dropna(subset=["sersic_sersic_vis_index", "concentration"])
+    if len(complete) < 2:
+        raise ValueError("at least two complete Sersic/concentration pairs are required")
+    sersic_n = complete["sersic_sersic_vis_index"].to_numpy()
+    conc = complete["concentration"].to_numpy()
     r, p = stats.spearmanr(sersic_n, conc)  # Spearman: monotonic, not linear, relationship expected
-    return {"n": len(df), "spearman_r": float(r), "spearman_p": float(p)}
+    return {"n_input": len(df), "n": len(complete), "n_dropped_missing": len(df) - len(complete),
+            "spearman_r": float(r), "spearman_p": float(p)}
 
 
 def position_dependent_residuals(

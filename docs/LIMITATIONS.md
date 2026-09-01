@@ -50,7 +50,7 @@ CAS statistics instead.
 The Sersic index and CAS concentration are different measurement
 approaches to related but distinct physical quantities (profile shape vs.
 light-curve-of-growth concentration). A moderate correlation
-(Spearman r=0.428) is the expected, physically sensible result; it should
+(Spearman r=0.424) is the expected, physically sensible result; it should
 not be read as either statistic being "wrong" or the two being
 interchangeable.
 

@@ -56,6 +56,10 @@ selection bias, not a bug in this project. This changed the project's
 planned cross-method comparison mid-development; see
 `docs/DATA_SOURCES.md`.
 
+The [VIS--NIR outlier audit](docs/OUTLIER_AUDIT.md) now characterizes the
+high-disagreement tail, its threshold sensitivity, fit-quality and size
+associations, and prevalence across all three real Q1 deep fields.
+
 ## What this is not
 
 - Not an independent re-measurement of galaxy morphology -- this audits

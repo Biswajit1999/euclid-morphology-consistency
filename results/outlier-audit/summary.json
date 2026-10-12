@@ -1,0 +1,15 @@
+{
+  "data_kind": "real Euclid Q1 MER catalogue measurements",
+  "n": 20000,
+  "n_outlier": 200,
+  "threshold_absolute_sersic_index": 5.199373469347099,
+  "median_chi2_outlier": 0.158781692385,
+  "median_chi2_core": 0.070450965315,
+  "median_vis_radius_outlier": 0.0504666790365,
+  "median_vis_radius_core": 0.2883015424,
+  "spearman_abs_residual_vs_chi2": 0.0035541251038240136,
+  "spearman_abs_residual_vs_chi2_p": 0.6152459762491056,
+  "spearman_abs_residual_vs_log_radius": -0.0013809996089518262,
+  "spearman_abs_residual_vs_log_radius_p": 0.8451653584468137,
+  "limitations": "The 99th-percentile tail is an audit definition, not a physical class. The sample is quality-flagged and spatially stratified but not a random draw from the complete Q1 population; neither VIS nor NIR is treated as truth."
+}

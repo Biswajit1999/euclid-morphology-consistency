@@ -23,6 +23,7 @@ dependencies = [
   "scipy>=1.10",
   "pandas>=2.0",
   "matplotlib>=3.7",
+  "SciencePlots>=2.1",
   "click>=8.1",
 ]
 

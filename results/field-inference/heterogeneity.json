@@ -1,0 +1,26 @@
+{
+  "data_kind": "derived from committed real Euclid Q1 field counts",
+  "interpretation": "conditional, sample-specific; not a survey-population claim",
+  "fields": [
+    "EDF-Fornax",
+    "EDF-North",
+    "EDF-South"
+  ],
+  "observed_outliers": [
+    28,
+    85,
+    87
+  ],
+  "expected_outliers": [
+    37.74,
+    75.47,
+    86.79
+  ],
+  "chi_square": 3.7551788040481178,
+  "asymptotic_p": 0.1529583828626553,
+  "conditional_mc_p": 0.15259237038148094,
+  "mc_exceedances": 3051,
+  "mc_simulations": 20000,
+  "mc_standard_error": 0.0025426509179314353,
+  "seed": 20261026
+}

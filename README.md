@@ -17,6 +17,13 @@ and `euclid-spectra-quality` (spectral contamination) audits.
 
 ## Research evidence and downloads
 
+
+- [Download the machine-readable table profiles](evidence/table-profiles.json) for 3 archived tables. Open `table-evidence.html` from the checkout for the coverage chart.
+- Start with [Summary](results/default/summary.json), [Summary](results/outlier-audit/summary.json), [Threshold sensitivity](results/outlier-audit/threshold_sensitivity.csv).
+- [View Filter and method consistency](results/figures/filter_and_method_consistency.png).
+
+To rebuild the table profiles after rebuilding the evidence inventory, run `python scripts/profile_evidence_tables.py` followed by `python scripts/render_table_profiles.py`.
+
 [Open the evidence browser file](evidence.html) for 13 selected files, including [`summary.json`](results/default/summary.json). Each file has a download link and SHA-256 digest. Serve this checkout with `python -m http.server` to view the static browser.
 
 Rebuild the inventory and browser with `python scripts/evidence_catalog.py` and `python scripts/render_evidence_page.py`.

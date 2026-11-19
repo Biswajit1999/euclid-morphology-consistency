@@ -1,0 +1,170 @@
+{
+  "schema": 1,
+  "project": "Euclid Q1 Morphology Measurement Comparison",
+  "tables": [
+    {
+      "path": "results/outlier-audit/threshold_sensitivity.csv",
+      "label": "Threshold sensitivity",
+      "role": "Tables and numerical results",
+      "rows": 4,
+      "width_mismatches": 0,
+      "columns": [
+        {
+          "name": "quantile",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 0.95,
+          "maximum": 0.995
+        },
+        {
+          "name": "threshold_absolute_sersic_index",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 5.111230938163001,
+          "maximum": 5.19988475979755
+        },
+        {
+          "name": "n_outlier",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 100.0,
+          "maximum": 1000.0
+        },
+        {
+          "name": "median_reduced_chi2",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 0.12445453927,
+          "maximum": 0.19115935266
+        },
+        {
+          "name": "median_vis_radius",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 0.0262392358855,
+          "maximum": 0.08749656751750001
+        },
+        {
+          "name": "median_axis_ratio_difference",
+          "blank": 0,
+          "text": 0,
+          "finite": 4,
+          "nonfinite": 0,
+          "minimum": 0.43402227387299996,
+          "maximum": 0.524568693711
+        }
+      ]
+    },
+    {
+      "path": "results/default/position_residuals.csv",
+      "label": "Position residuals",
+      "role": "Tables and numerical results",
+      "rows": 19,
+      "width_mismatches": 0,
+      "columns": [
+        {
+          "name": "deep_field",
+          "blank": 0,
+          "text": 19,
+          "finite": 0,
+          "nonfinite": 0
+        },
+        {
+          "name": "ra_bin",
+          "blank": 0,
+          "text": 19,
+          "finite": 0,
+          "nonfinite": 0
+        },
+        {
+          "name": "dec_bin",
+          "blank": 0,
+          "text": 19,
+          "finite": 0,
+          "nonfinite": 0
+        },
+        {
+          "name": "n",
+          "blank": 0,
+          "text": 0,
+          "finite": 19,
+          "nonfinite": 0,
+          "minimum": 23.0,
+          "maximum": 6441.0
+        },
+        {
+          "name": "median_resid",
+          "blank": 0,
+          "text": 0,
+          "finite": 19,
+          "nonfinite": 0,
+          "minimum": -0.19906431436999994,
+          "maximum": 0.01560977100500005
+        },
+        {
+          "name": "std_resid",
+          "blank": 0,
+          "text": 0,
+          "finite": 19,
+          "nonfinite": 0,
+          "minimum": 1.7796831471590346,
+          "maximum": 2.472145066200455
+        }
+      ]
+    },
+    {
+      "path": "results/outlier-audit/field_rates.csv",
+      "label": "Field rates",
+      "role": "Tables and numerical results",
+      "rows": 3,
+      "width_mismatches": 0,
+      "columns": [
+        {
+          "name": "deep_field",
+          "blank": 0,
+          "text": 3,
+          "finite": 0,
+          "nonfinite": 0
+        },
+        {
+          "name": "n",
+          "blank": 0,
+          "text": 0,
+          "finite": 3,
+          "nonfinite": 0,
+          "minimum": 3774.0,
+          "maximum": 8679.0
+        },
+        {
+          "name": "n_outlier",
+          "blank": 0,
+          "text": 0,
+          "finite": 3,
+          "nonfinite": 0,
+          "minimum": 28.0,
+          "maximum": 87.0
+        },
+        {
+          "name": "rate",
+          "blank": 0,
+          "text": 0,
+          "finite": 3,
+          "nonfinite": 0,
+          "minimum": 0.007419183889772125,
+          "maximum": 0.011262753411951768
+        }
+      ]
+    }
+  ],
+  "excluded": []
+}

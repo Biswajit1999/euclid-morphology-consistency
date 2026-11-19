@@ -1,0 +1,71 @@
+{
+  "project": "Euclid Q1 Morphology Measurement Comparison",
+  "repository": "https://github.com/Biswajit1999/euclid-morphology-consistency",
+  "files": [
+    {
+      "label": "Data source notes",
+      "path": "data/README.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Project claims",
+      "path": "docs/CLAIMS.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Project data sources",
+      "path": "docs/DATA_SOURCES.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Project methods",
+      "path": "docs/METHODS.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Summary",
+      "path": "results/default/summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Summary",
+      "path": "results/outlier-audit/summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Threshold sensitivity",
+      "path": "results/outlier-audit/threshold_sensitivity.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Disk sersic null audit",
+      "path": "results/default/disk_sersic_null_audit.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Position residuals",
+      "path": "results/default/position_residuals.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Field rates",
+      "path": "results/outlier-audit/field_rates.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Filter and method consistency",
+      "path": "results/figures/filter_and_method_consistency.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Position residuals by field",
+      "path": "results/figures/position_residuals_by_field.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Outlier audit",
+      "path": "results/outlier-audit/outlier_audit.png",
+      "role": "Figures"
+    }
+  ]
+}
